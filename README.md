@@ -8,8 +8,11 @@ The word list is in a .txt file, and it should be formulated as in Hayes and Wil
 
 
 p a t a
+
 p i k u b e
+
 s a mb u k i
+
 k a tʃ o
 ...
 
@@ -28,16 +31,21 @@ Example use:
 
 $ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u"
 
-	a	e	i	o	u
-a	0.31	0.12	0.23	0.14	0.18
-e	0.39	1.06	0.23	1.21	0.15
-i	0.2	0.0	0.38	0.01	0.22
-o	0.28	1.14	0.16	1.54	0.2
-u	0.18	0.0	0.27	0.0	0.43
+		a	e	i	o	u
+
+	a	0.31	0.12	0.23	0.14	0.18
+
+	e	0.39	1.06	0.23	1.21	0.15
+
+	i	0.2	0.0	0.38	0.01	0.22
+
+	o	0.28	1.14	0.16	1.54	0.2
+
+	u	0.18	0.0	0.27	0.0	0.43
 
 
 ================================================================================
-Requirements and installation
+Requirements
 ================================================================================
 
 Requires python3. Go to http://python.org to install.
@@ -47,7 +55,9 @@ If you want to run it from python3, navigate to wherever you keep your custom mo
 >>> from oecalc import OE
 OE(filepath="filename.txt", segs="k q K Q", rounded=3)
 
-
+================================================================================
+Installation
+================================================================================
 
 
 You can make this a command line utility as follows. (Instructions assume a Linux-like operating environment)
