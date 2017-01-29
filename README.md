@@ -6,16 +6,13 @@ This module supplies a function for calculating observed/expected values for pai
 
 The word list is in a .txt file, and it should be formulated as in Hayes and Wilson's UCLA Phonotactic Learner: one word per line with spaces separating individual segments. Segments can consist of arbitrarily long sequences of letters. Unicode is supported.
 
-
+```
 p a t a
-
 p i k u b e
-
 s a mb u k i
-
 k a tʃ o
 ...
-
+```
 
 The segments over which O/E is calculated are passed to the function as a space-separated list, as follows: 
 
@@ -56,8 +53,10 @@ Requires python3. Go to http://python.org to install.
 
 If you want to run it from python3, navigate to wherever you keep your custom modules and do the following:
 
+```
 >>> from oecalc import OE
-OE(filepath="filename.txt", segs="k q K Q", rounded=3)
+>>> OE(filepath="filename.txt", segs="k q K Q", rounded=3)
+```
 
 ================================================================================
 Installation for command line use
@@ -68,20 +67,27 @@ You can make this a command line utility as follows. (Instructions assume a Linu
 
 1. Copy or move the oecalc file to the directory where you keep your scripts. For example, start Terminal and do this at the bash prompt:
 
+```
 $ cp /home/yourname/downloads/oecalc /home/yourname/bin/
 $ touch __init__.py
+```
 
-2. Add the following line to your /home/yourname/.bashrc or .bash_profile:
+2. Add the following line to your ```/home/yourname/.bashrc``` or ```.bash_profile```:
 
+```
 export PYTHONPATH="${PYTHONPATH}:/home/yourname/bin"
+```
+and then
 
+```
 $ source /home/yourname/.bashrc
+```
 
-This will allow python to recognize scripts inside /home/yourname/bin as executables.
+This will allow python to recognize scripts inside ```/home/yourname/bin``` as executables.
 
 3. You can invoke it from Terminal/bash like this:
 
-$ oecalc /home/yourname/pathtosomefile.txt "a e i o u"
+```$ oecalc /home/yourname/pathtosomefile.txt "a e i o u"```
 
 and it will print out a nice O/E table for you right in terminal.
 
