@@ -17,9 +17,9 @@ k a tʃ o
 ...
 
 
-The segments over which O/E is calculated are passed to the function as a comma-separated list. For example, 
+The segments over which O/E is calculated are passed to the function as a space-separated list, as follows: 
 
-"a, e, i, o, u"
+"a e i o u"
 
 or
 
@@ -27,9 +27,11 @@ or
 
 The output is a table of segments (first in row, second in column), with O/E numbers rounded to the value specified by you.
 
-Example use:
+Example use from command line:
 
 $ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u"
+
+Output to your terminal:
 
 		a	e	i	o	u
 
@@ -42,6 +44,8 @@ $ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u"
 	o	0.28	1.14	0.16	1.54	0.2
 
 	u	0.18	0.0	0.27	0.0	0.43
+
+This means that, on a tier consisting of only "a, e, i, o, u" segments, the pair "a e" had an O/E of 0.12, and the pair "a i" had an O/E of 0.23. Every pair of vowels in a word gets counted separately, so in the word "p a t e k a b e", the sequences "a e", "e a", "a e" will be counted.
 
 
 ================================================================================
@@ -56,7 +60,7 @@ If you want to run it from python3, navigate to wherever you keep your custom mo
 OE(filepath="filename.txt", segs="k q K Q", rounded=3)
 
 ================================================================================
-Installation
+Installation for command line use
 ================================================================================
 
 
