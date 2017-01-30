@@ -131,17 +131,17 @@ def OE(filepath, segs, prnt=True, outfile="None", rndparam=2):
 
 if __name__ == "__main__":
 	import sys
+	rndparam=2
+	prnt=True
 	if len(sys.argv)==1:
-		print("please see the README.md on http://github.com/gouskova/oecalc for help and use instructions.")
+		print("you need to supply some arguments to oecalc. please see the README.md on http://github.com/gouskova/oecalc for help and use instructions.")
 	elif len(sys.argv)>1:
 		filepath=sys.argv[1]
 		segs = sys.argv[2]
-		rndparam=2
-		prnt=True
-	elif len(sys.argv)==3:
+	if len(sys.argv)>3:
 		rndparam=sys.argv[3]
-	elif len(sys.argv)==4:
+	if len(sys.argv)>4:
 		prnt=sys.argv[4]
-	elif len(sys.argv)>4:
+	if len(sys.argv)>5:
 		print("too many arguments passed to oecalc--check spaces, maybe?")
 	OE(filepath, segs, rndparam, prnt)
