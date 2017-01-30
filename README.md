@@ -16,31 +16,32 @@ k a tʃ o
 
 The segments over which O/E is calculated are passed to the function as a space-separated list, as follows: 
 
+```
 "a e i o u"
+```
 
 or
 
+```
 "t, tʃ"
+```
 
 The output is a table of segments (first in row, second in column), with O/E numbers rounded to the value specified by you.
 
 Example use from command line:
 
-$ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u"
+```$ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u"```
 
 Output to your terminal:
 
-		a	e	i	o	u
-
-	a	0.31	0.12	0.23	0.14	0.18
-
-	e	0.39	1.06	0.23	1.21	0.15
-
-	i	0.2	0.0	0.38	0.01	0.22
-
-	o	0.28	1.14	0.16	1.54	0.2
-
-	u	0.18	0.0	0.27	0.0	0.43
+```
+	a	e	i	o	u
+a	0.31	0.12	0.23	0.14	0.18
+e	0.39	1.06	0.23	1.21	0.15
+i	0.2	0.0	0.38	0.01	0.22
+o	0.28	1.14	0.16	1.54	0.2
+u	0.18	0.0	0.27	0.0	0.43
+```
 
 This means that, on a tier consisting of only "a, e, i, o, u" segments, the pair "a e" had an O/E of 0.12, and the pair "a i" had an O/E of 0.23. Every pair of vowels in a word gets counted separately, so in the word "p a t e k a b e", the sequences "a e", "e a", "a e" will be counted.
 
