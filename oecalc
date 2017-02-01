@@ -34,7 +34,7 @@ For additional options, from python3, type "help(oecalc)" or "help(OE, oecalc)"
 
 from itertools import product
  
-def pairOEcalc(filepath, segs, rndparam=2):
+def pairOEcalc(filepath, segs):
 	'''
 	filepath is a path to the file you want to calculate O/E over.
 	formatting: same as the input to Hayes and Wilson's UCLA Phonotactic Learner, only this can deal with Unicode
@@ -78,10 +78,9 @@ def pairOEcalc(filepath, segs, rndparam=2):
 		seg1,seg2 = pair[0],pair[1]
 		pairs[pair]['expected'] = segs[seg1]*segs[seg2]/paircount
 		pairs[pair]['OE'] = pairs[pair]['observed']/pairs[pair]['expected']
-		pairs[pair]['OErnd']=round(pairs[pair]['OE'],rndparam)
 	return(pairs)
 
-def makeOETable(pairsdic, segs, rounded=True, prnt=True, outfile="None"):
+def makeOETable(pairsdic, segs):
 	'''
 	arranges the O/E values and sorts them into a table for display.
 	"prnt" defaults to "True"; the function will print the results to screen.
@@ -90,29 +89,17 @@ def makeOETable(pairsdic, segs, rounded=True, prnt=True, outfile="None"):
 	'''
 	seglist = segs.strip().split(' ')
 	header = '\t'+'\t'.join(seglist)
-	if outfile!="None":
-		f = open(outfile, 'w', encoding="utf-8")
 	rows = [header]
 	for seg in seglist:
 		row = [seg]
-		rndrow = [seg]
 		for otherseg in seglist:
 			pair = seg+otherseg
 			row.append(str(pairsdic[pair]['OE']))
-			rndrow.append(str(pairsdic[pair]['OErnd']))
-		if rounded == False:
-			outrow = '\t'.join(row)
-		else:
-			outrow = '\t'.join(rndrow)
+		outrow = '\t'.join(row)
 		rows.append(outrow)
-	if print:
-		for row in rows:
-			print(row)
-	if outfile!="None":
-		[f.write(row+'\n') for row in rows]
-		f.close()
+	return(rows)
 
-def OE(filepath, segs, prnt=True, outfile="None", rndparam=2):
+def OE(filepath, segs, rndparam):
 	'''
 	filepath is where your wordlist is located. Absolute path might be best here
 	segs is the list of segments, space-separated, over which you want O/E calculated
@@ -120,14 +107,12 @@ def OE(filepath, segs, prnt=True, outfile="None", rndparam=2):
 	outfile is either "None" or a path to the file where you want the results saved.
 	rndparam determines the rounding parameter for the O/E value that you see printed to screen or saved to file. Default is 2 decimals, e.g., 0.34122 will be printed as 0.34
 	'''
-	if rndparam!=2:
-			rounded=False
-	else:
-			rounded=True
-	pairsdic = pairOEcalc(filepath, segs, rndparam)
-	makeOETable(pairsdic, segs, rounded, prnt, outfile)
+	pairsdic = pairOEcalc(filepath, segs)
+	out=makeOETable(pairsdic, segs)
+	return(out)
 
-
+def writeOE(infile, outfile):
+    rows = OE
 
 if __name__ == "__main__":
 	import sys
@@ -139,7 +124,7 @@ if __name__ == "__main__":
 		filepath=sys.argv[1]
 		segs = sys.argv[2]
 	if len(sys.argv)>3:
-		rndparam=sys.argv[3]
+			rndparam=int(sys.argv[3])
 	if len(sys.argv)>4:
 		prnt=sys.argv[4]
 	if len(sys.argv)>5:
