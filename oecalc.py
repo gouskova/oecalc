@@ -33,7 +33,10 @@ For additional options, from python3, type "help(oecalc)" or "help(OE, oecalc)"
 
 
 from itertools import product
- 
+
+
+# make a dictionary of pairs of segs and collect their O/E values into it
+
 def pairOEcalc(filepath, segs):
 	'''
 	filepath is a path to the file you want to calculate O/E over.
@@ -81,6 +84,8 @@ def pairOEcalc(filepath, segs):
 		pairs[pair]['OErnd']=round(pairs[pair]['OE'],3)
 	return(pairs)
 
+# make the dictionary printable   
+
 def makeOETable(pairsdic, segs, rounded=True):
 	'''
 	arranges the O/E values and sorts them into a table for display.
@@ -101,6 +106,8 @@ def makeOETable(pairsdic, segs, rounded=True):
 		outrow = '\t'.join(row)
 		rows.append(outrow)
 	return(rows)
+
+# printable observed and expected values (as opposed to ratio) for each pair
 
 def makeCountTable(pairsdic, segs):
         '''
@@ -123,6 +130,7 @@ def makeCountTable(pairsdic, segs):
                 rows.append(outrow2)
         return(rows)
 
+#a convenience function that combines OE collection and printing
 def OE(filepath, segs):
 	'''
 	filepath is where your wordlist is located. Absolute path might be best here
@@ -134,6 +142,8 @@ def OE(filepath, segs):
 		print(line)
 	return(out)
 
+
+#saves OE table to file
 def writeOE(filepath, segs, outfilepath, rounded=True):
         '''
         filepath is where your wordlist is located
@@ -148,6 +158,8 @@ def writeOE(filepath, segs, outfilepath, rounded=True):
             f.write(row+'\n')
         f.close()
 
+
+#if you want to run it from command line--just to print table of OE values to screen
 if __name__ == "__main__":
 	import sys
 	if len(sys.argv)==1:
