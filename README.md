@@ -1,6 +1,5 @@
-================================================================================
 Overview
-================================================================================
+==
 
 This module supplies a function for calculating observed/expected values for pairs of segments in a word list.
 
@@ -26,42 +25,43 @@ or
 "t, tʃ"
 ```
 
-The output is a table of segments (first in row, second in column), with O/E numbers rounded to the value specified by you.
+The output is a table of segments (first in row, second in column), with O/E numbers rounded to 3 decimals. 
 
 Example use from command line:
 
 ```$ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u"```
 
-Output to your terminal:
+Output you see in your terminal:
 
 ```
 	a	e	i	o	u
-a	0.31	0.12	0.23	0.14	0.18
-e	0.39	1.06	0.23	1.21	0.15
-i	0.2	0.0	0.38	0.01	0.22
-o	0.28	1.14	0.16	1.54	0.2
-u	0.18	0.0	0.27	0.0	0.43
+a	0.311	0.12	0.233	0.914	0.128
+e	0.393	1.066	0.232	1.921	0.151
+i	0.271	0.0	0.383	0.019	0.223
+o	0.028	1.143	0.167	1.554	0.201
+u	0.181	0.033	0.278	0.054	0.043
 ```
 
-This means that, on a tier consisting of only "a, e, i, o, u" segments, the pair "a e" had an O/E of 0.12, and the pair "a i" had an O/E of 0.23. Every pair of vowels in a word gets counted separately, so in the word "p a t e k a b e", the sequences "a e", "e a", "a e" will be counted.
+This means that, on a tier consisting of only "a, e, i, o, u" segments, the pair "a e" had an O/E of 0.12, and the pair "a i" had an O/E of 0.233. Every pair of vowels in a word gets counted separately, so in the word "p a t e k a b e", the sequences "a e", "e a", "a e" will be counted.
 
 
-================================================================================
 Requirements
-================================================================================
+==
 
 Requires python3. Go to http://python.org to install.
 
 If you want to run it from python3, navigate to wherever you keep your custom modules and do the following:
 
 ```
->>> from oecalc import OE
->>> OE(filepath="filename.txt", segs="k q K Q", rounded=3)
+>>> import oecalc
+help(oecalc) #to print the "documentation"
+
+oecalc.OE('/home/yourname/pathtoryourfiles.txt', 'p q dh th')
+
 ```
 
-================================================================================
 Installation for command line use
-================================================================================
+==
 
 
 You can make this a command line utility as follows. (Instructions assume a Linux-like operating environment)
