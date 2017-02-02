@@ -78,14 +78,14 @@ def pairOEcalc(filepath, segs):
 		seg1,seg2 = pair[0],pair[1]
 		pairs[pair]['expected'] = segs[seg1]*segs[seg2]/paircount
 		pairs[pair]['OE'] = pairs[pair]['observed']/pairs[pair]['expected']
+		pairs[pair]['OErnd']=round(pairs[pair]['OE'],3)
 	return(pairs)
 
-def makeOETable(pairsdic, segs):
+def makeOETable(pairsdic, segs, rounded=True):
 	'''
 	arranges the O/E values and sorts them into a table for display.
-	"prnt" defaults to "True"; the function will print the results to screen.
-	the default rounding parameter is 2 (e.g., 0.34122 gets printed as 0.34)
-	if you want something different, set "rounded" to "False"
+	the input should be the dictionary that's returned by pairOEcalc()
+	output is a list of tab-separated lines that, if printed, looks like a table
 	'''
 	seglist = segs.strip().split(' ')
 	header = '\t'+'\t'.join(seglist)
@@ -94,39 +94,65 @@ def makeOETable(pairsdic, segs):
 		row = [seg]
 		for otherseg in seglist:
 			pair = seg+otherseg
-			row.append(str(pairsdic[pair]['OE']))
+			if rounded:
+				row.append(str(pairsdic[pair]['OErnd']))
+			else:
+				row.append(str(pairsdic[pair]['OE']))
 		outrow = '\t'.join(row)
 		rows.append(outrow)
 	return(rows)
 
-def OE(filepath, segs, rndparam):
+def makeCountTable(pairsdic, segs):
+        '''
+        print how often each segment in a pair was observed and how often it was expected
+
+        '''
+        seglist = segs.strip().split(' ')
+        header = '\t'+'\t'.join(seglist)
+        rows = [header]
+        for seg in seglist:
+                row1 = [seg+' observed']
+                row2 = [seg+' expected']
+                for otherseg in seglist:
+                        pair = seg+otherseg
+                        row1.append(str(pairsdic[pair]['observed']))
+                        row2.append(str(pairsdic[pair]['expected']))
+                outrow1 = '\t'.join(row1)
+                outrow2 = '\t'.join(row2)
+                rows.append(outrow1)
+                rows.append(outrow2)
+        return(rows)
+
+def OE(filepath, segs):
 	'''
 	filepath is where your wordlist is located. Absolute path might be best here
 	segs is the list of segments, space-separated, over which you want O/E calculated
-	prnt (True, False) defines whether the table is printed to terminal stdout
-	outfile is either "None" or a path to the file where you want the results saved.
-	rndparam determines the rounding parameter for the O/E value that you see printed to screen or saved to file. Default is 2 decimals, e.g., 0.34122 will be printed as 0.34
 	'''
 	pairsdic = pairOEcalc(filepath, segs)
 	out=makeOETable(pairsdic, segs)
+	for line in out:
+		print(line)
 	return(out)
 
-def writeOE(infile, outfile):
-    rows = OE
+def writeOE(filepath, segs, outfilepath, rounded=True):
+        '''
+        filepath is where your wordlist is located
+        segs is the list of segments, space-separated, over which you want O/E calculated
+        outfilepath is for recording the results
+        if rounded is True, the output will be rounded to 3 decimals (otherwise it's Python3's default for integers, which is unreadably long)
+        '''
+        pairsdic = pairOEcalc(filepath, segs)
+        out = makeOETable(pairsdic, segs, rounded)
+        f = open(outfilepath, 'w', encoding='utf-8')
+        for row in out:
+            f.write(row+'\n')
+        f.close()
 
 if __name__ == "__main__":
 	import sys
-	rndparam=2
-	prnt=True
 	if len(sys.argv)==1:
 		print("you need to supply some arguments to oecalc. please see the README.md on http://github.com/gouskova/oecalc for help and use instructions.")
 	elif len(sys.argv)>1:
 		filepath=sys.argv[1]
 		segs = sys.argv[2]
-	if len(sys.argv)>3:
-			rndparam=int(sys.argv[3])
-	if len(sys.argv)>4:
-		prnt=sys.argv[4]
-	if len(sys.argv)>5:
-		print("too many arguments passed to oecalc--check spaces, maybe?")
-	OE(filepath, segs, rndparam, prnt)
+		OE(filepath, segs)
