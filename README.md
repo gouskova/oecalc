@@ -3,7 +3,7 @@ Overview
 
 This module supplies a function for calculating observed/expected values for pairs of segments in a word list.
 
-The word list is in a .txt file, and it should be formulated as in Hayes and Wilson's UCLA Phonotactic Learner: one word per line with spaces separating individual segments. Segments can consist of arbitrarily long sequences of letters. Unicode is supported.
+The word list is in a .txt file, and it should be formulated as in Hayes and Wilson's UCLA Phonotactic Learner: one word per line with spaces separating individual segments. Segments can consist of arbitrarily long sequences of letters. The file must be in Unicode (utf-8).
 
 ```
 p a t a
