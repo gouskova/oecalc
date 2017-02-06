@@ -73,12 +73,20 @@ $ cp /home/yourname/downloads/oecalc /home/yourname/bin/
 $ touch __init__.py
 ```
 
-2. Add the following line to your ```/home/yourname/.bashrc``` or ```.bash_profile```:
+2. Linux: add the following line to your ```/home/yourname/.bashrc```:
 
 ```
 export PYTHONPATH="${PYTHONPATH}:/home/yourname/bin"
 ```
-and then
+
+Mac: add the folllowing lines to your ```/home/yourname/.bash_profile```:
+
+```
+PATH="/Users/yourname/bin:${PATH}"
+export PATH
+```
+
+and then, in terminal,
 
 ```
 $ source /home/yourname/.bashrc
