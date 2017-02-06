@@ -22,7 +22,7 @@ The segments over which O/E is calculated are passed to the function as a space-
 or
 
 ```
-"t, tʃ"
+"t tʃ"
 ```
 
 The output is a table of segments (first in row, second in column), with O/E numbers rounded to 3 decimals. 
