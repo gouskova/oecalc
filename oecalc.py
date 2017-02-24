@@ -33,11 +33,11 @@ For additional options, from python3, type "help(oecalc)" or "help(OE, oecalc)"
 
 
 from itertools import product
-
+import re
 
 # make a dictionary of pairs of segs and collect their O/E values into it
 
-def pairOEcalc(filepath, segs):
+def pairOEcalc(filepath, segs, local=True):
 	'''
 	filepath is a path to the file you want to calculate O/E over.
 	formatting: same as the input to Hayes and Wilson's UCLA Phonotactic Learner, only this can deal with Unicode
@@ -45,6 +45,7 @@ def pairOEcalc(filepath, segs):
 	p a t a
 	p i k u b e
 	s a mb u k i
+        p t a k u
 
 	segs is the list of segbols you want to evaluate for Observed/Expected. separate it by spaces and surround by quotes, "e i o"
 	O/E is calculated as follows:
@@ -52,6 +53,8 @@ def pairOEcalc(filepath, segs):
 	Observed: N(S1S2)
 	the function will return unrounded OE, as well as a value rounded to the parameter given by the "rounded" argument.
 	Defaults to 2, so an O/E value of 1.3432 will be printed as 1.34.
+        
+        "local" determines whether the calculations are done on adjacent segments (True) or non-adjacent ones (False). In the little example above, looking for "p t" with local=True will count "p t a k u" as one observed instance of the sequence, and ignore "p a t a". If you set "local" to false, however, both words will count towards observed instances. 
 	'''
 	try:
 		words = open(filepath, 'r', encoding='utf-8').readlines()
@@ -59,13 +62,24 @@ def pairOEcalc(filepath, segs):
 		print("please make sure there is a file to read at the location.")
 		pass
 	seglist = segs.strip().split(' ')
-	wordlist = [x.strip().split() for x in words]
+	wordlist = [x.strip().split(' ') for x in words]
 	pairs = {}.fromkeys(''.join(list(x)) for x in product(seglist, repeat=2)) #creates a dictionary with S1,S2 pairs from seglist, every possible combination
 	segs = {}.fromkeys(seglist, 0)
 	for x in pairs:
 		pairs[x] = {'observed':0, 'expected':0}
 	paircount = 0
-	for word in wordlist:
+        if local:
+            for word in wordlist: #find every instance of x in word, plus whatever segment it is immediately followed by.
+                segs = [x for x in word if x in seglist]
+                if len(segs)=0:
+                    continue
+                else:
+                    for seg in word:
+                        if seg in seglist:
+                            seg_ind = seg.index(word)
+                            seg2 =  
+        else:
+	    for word in wordlist:
 		word = [x for x in word if x in seglist]
 		if len(word)<2:
 			continue
