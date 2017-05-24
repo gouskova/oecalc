@@ -39,9 +39,6 @@ import re
 
 def nonlocOEcalc(filepath, segs):
     '''
-    example usage:
-
-    nonlocOEcalc /home/you/file.txt 'a e i o u' nonlocal
     filepath is a path to the file you want to calculate O/E over.
     formatting: same as the input to Hayes and Wilson's UCLA Phonotactic Learner; segments separated by spaces.
 
@@ -91,12 +88,13 @@ def nonlocOEcalc(filepath, segs):
 
 # make the dictionary printable   
 
-def makeOETable(pairsdic, segs, rounded=True):
+def makeOETable(filepath, segs, rounded=True):
     '''
     arranges the O/E values and sorts them into a table for display.
     the input should be the dictionary that's returned by pairOEcalc()
     output is a list of tab-separated lines that, if printed, looks like a table
     '''
+    pairsdic = nonlocOEcalc(filepath, segs)
     seglist = segs.strip().split(' ')
     header = '\t'+'\t'.join(seglist)
     rows = [header]
@@ -104,21 +102,22 @@ def makeOETable(pairsdic, segs, rounded=True):
         row = [seg]
         for otherseg in seglist:
             pair = seg+otherseg
-        if rounded:
-            row.append(str(pairsdic[pair]['OErnd']))
-        else:
-            row.append(str(pairsdic[pair]['OE']))
-            outrow = '\t'.join(row)
-            rows.append(outrow)
+            if rounded:
+                row.append(str(pairsdic[pair]['OErnd']))
+            else:
+                row.append(str(pairsdic[pair]['OE']))
+        outrow = '\t'.join(row)
+        rows.append(outrow)
     return(rows)
 
 # printable observed and expected values (as opposed to ratio) for each pair
 
-def makeCountTable(pairsdic, segs):
+def makeCountTable(filepath, segs):
         '''
         print how often each segment in a pair was observed and how often it was expected
 
         '''
+        pairsdic=nonlocOEcalc(filepath, segs)
         seglist = segs.strip().split(' ')
         header = '\t'+'\t'.join(seglist)
         rows = [header]
@@ -128,36 +127,24 @@ def makeCountTable(pairsdic, segs):
                 for otherseg in seglist:
                         pair = seg+otherseg
                         row1.append(str(pairsdic[pair]['observed']))
-                        row2.append(str(pairsdic[pair]['expected']))
+                        row2.append(str(round(pairsdic[pair]['expected'], 2)))
                 outrow1 = '\t'.join(row1)
                 outrow2 = '\t'.join(row2)
                 rows.append(outrow1)
                 rows.append(outrow2)
         return(rows)
 
-#a convenience function that combines OE collection and printing
-def nonlocOE(filepath, segs):
-    '''
-    filepath is where your wordlist is located. Absolute path might be best here
-    segs is the list of segments, space-separated, over which you want O/E calculated
-    '''
-    pairsdic = nonlocOEcalc(filepath, segs)
-    out=makeOETable(pairsdic, segs)
-    for line in out:
-        print(line)
-    return(out)
-
 
 #saves OE table to file
 def writeOE(filepath, segs, outfilepath, rounded=True):
         '''
-        filepath is where your wordlist is located
+        filepath is where your wordlist is located.
         segs is the list of segments, space-separated, over which you want O/E calculated
         outfilepath is for recording the results
-        if rounded is True, the output will be rounded to 3 decimals (otherwise it's Python3's default for integers, which is unreadably long)
+        if rounded is True, the output will be rounded to 3 decimals (otherwise its Python3s default for integers, which is unreadably long)
         '''
-        pairsdic = nonlocOEcalc(filepath, segs)
-        out = makeOETable(pairsdic, segs, rounded)
+        pairsdic = nonlocOE(filepath, segs)
+        out = makeOETable(filepath, segs, rounded)
         f = open(outfilepath, 'w', encoding='utf-8')
         for row in out:
             f.write(row+'\n')
@@ -169,7 +156,14 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv)==1:
         print("you need to supply some arguments to oecalc. please see the README.md on http://github.com/gouskova/oecalc for help and use instructions.")
-    elif len(sys.argv)>1:
+    else:
         filepath=sys.argv[1]
-        segs = sys.argv[2]
-        nonlocOE(filepath, segs)
+        segs=sys.argv[2]
+        if sys.argv[-1]=='raw':
+            table = makeCountTable(filepath, segs)
+        if sys.argv[-1]=='ratio': 
+            table = makeOETable(filepath, segs)
+            if len(table)==1:
+                print('something went wrong')
+        for row in table:
+            print(row)
