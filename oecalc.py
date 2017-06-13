@@ -37,6 +37,7 @@ import re
 
 # make a dictionary of pairs of segs and collect their O/E values into it
 
+
 def nonlocOEcalc(filepath, segs):
     '''
     filepath is a path to the file you want to calculate O/E over.
@@ -85,6 +86,60 @@ def nonlocOEcalc(filepath, segs):
             pairs[pair]['OE'] = pairs[pair]['observed']/pairs[pair]['expected']
             pairs[pair]['OErnd']=round(pairs[pair]['OE'],3)
     return(pairs)
+
+
+
+def nonlocOEcalc_old(filepath, segs):
+    '''
+    filepath is a path to the file you want to calculate O/E over.
+    formatting: same as the input to Hayes and Wilson's UCLA Phonotactic Learner; segments separated by spaces.
+
+    p a t a
+    p i k u b e
+    s a mb u k i
+    p t a k u
+
+    segs is the list of symbols you want to evaluate for Observed/Expected. separate it by spaces and surround by quotes, "e i o"
+    O/E is calculated as follows:
+    Expected: N(S1) * N(S2)/ N of all pairs
+    Observed: N(S1S2)
+    the function will return unrounded OE, as well as a value rounded to the parameter given by the "rounded" argument.
+    Defaults to 2, so an O/E value of 1.3432 will be printed as 1.34.
+
+    '''
+    try:
+        words = open(filepath, 'r', encoding='utf-8').readlines()
+    except FileNotFoundError:
+        print("please make sure there is a file to read at the location.")
+        pass
+    seglist = segs.strip().split(' ')
+    wordlist = [x.strip().split(' ') for x in words]
+    pairs = {}.fromkeys(''.join(list(x)) for x in product(seglist, repeat=2)) #creates a dictionary with S1,S2 pairs from seglist, every possible combination
+    segs = {}.fromkeys(seglist, 0)
+    for x in pairs:
+        pairs[x] = {'observed':0, 'expected':0}
+    paircount = 0
+    for word in wordlist:
+            word = [x for x in word if x in seglist]
+            if len(word)<2:
+                continue
+            else:
+                segpairsinword = [word[x]+word[x+1] for x in range(0, len(word)-1)] #a list of 2-seg pairs in the word
+                paircount += len(segpairsinword)
+                for pair in segpairsinword:
+                    joined = ''.join(pair)
+                    pairs[joined]['observed']+=1
+                for seg in word:
+                        segs[seg] += 1
+    for pair in pairs:
+            seg1,seg2 = pair[0],pair[1]
+            pairs[pair]['expected'] = segs[seg1]*segs[seg2]/paircount
+            pairs[pair]['OE'] = pairs[pair]['observed']/pairs[pair]['expected']
+            pairs[pair]['OErnd']=round(pairs[pair]['OE'],3)
+    return(pairs)
+
+
+
 
 # make the dictionary printable   
 
