@@ -38,7 +38,7 @@ import re
 # make a dictionary of pairs of segs and collect their O/E values into it
 
 
-def OEcalc(filepath, segs, local='nonlocal'):
+def OEcalc(filepath, segs, local):
     '''
     filepath is a path to the file you want to calculate O/E over.
     formatting: same as the input to Hayes and Wilson's UCLA Phonotactic Learner; segments separated by spaces.
@@ -83,9 +83,10 @@ def OEcalc(filepath, segs, local='nonlocal'):
                 segpairsinword = [wrd[x]+'|' + wrd[x+1] for x in range(0, len(wrd)-1)] #a list of 2-seg pairs in the word
                 paircount += len(segpairsinword)
                 for pair in segpairsinword:
-                    pairs[pair]['observed']+=1
-                    segs[pair.split('|')[0]+'1'] += 1 #count actual observed freq of seg 1 in pair
-                    segs[pair.split('|')[1]+'2'] += 1 #count actual observed freq of seg 2 in pair
+                    if pair in pairs:
+                        pairs[pair]['observed']+=1
+                        segs[pair.split('|')[0]+'1'] += 1 #count actual observed freq of seg 1 in pair
+                        segs[pair.split('|')[1]+'2'] += 1 #count actual observed freq of seg 2 in pair
     for pair in pairs:
             pr = pair.split("|")
             seg1,seg2 = pr[0],pr[1]
@@ -101,7 +102,7 @@ def OEcalc(filepath, segs, local='nonlocal'):
 
 # make the dictionary printable   
 
-def makeOETable(filepath, segs, rounded=True, local='nonlocal'):
+def makeOETable(filepath, segs, local, rounded=True):
     '''
     arranges the O/E values and sorts them into a table for display.
     the input should be the dictionary that's returned by pairOEcalc()
@@ -125,7 +126,7 @@ def makeOETable(filepath, segs, rounded=True, local='nonlocal'):
 
 # printable observed and expected values (as opposed to ratio) for each pair
 
-def makeCountTable(filepath, segs, local='nonlocal'):
+def makeCountTable(filepath, segs, local):
         '''
         print how often each segment in a pair was observed and how often it was expected
 
