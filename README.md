@@ -96,8 +96,8 @@ This will allow python to recognize scripts inside ```/home/yourname/bin``` as e
 
 3. You can invoke it from Terminal/bash like this:
 
-```$ oecalc /home/yourname/pathtosomefile.txt "a e i o u"```
+```$ oecalc /home/yourname/pathtosomefile.txt "a e i o u" local```
 
-and it will print out a nice O/E table for you right in terminal.
+and it will print out a nice O/E table for you right in terminal. The filepath, segments, and local/nonlocal arguments are obligatory. "Local/nonlocal" determines whether you get calculations for adjacent segments--if "local"--(e.g., "apta" would be counted for "p t" co-occurrences, but "pata" would not) or for non-adjacent ones if "nonlocal" (i.e., both "apta" and "pata" would be counted, since the "p" and "t" would be present on a P-T projection).
 
 Comments? Suggestions? Complaints? Write to your Congressional Representative.
