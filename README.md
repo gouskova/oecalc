@@ -29,7 +29,7 @@ The output is a table of segments (first in row, second in column), with O/E num
 
 Example use from command line:
 
-```$ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u"```
+```$ oecalc /home/yourname/yourdatafolder/LearningData.txt "a e i o u" local```
 
 Output you see in your terminal:
 
@@ -42,7 +42,7 @@ o	0.028	1.143	0.167	1.554	0.201
 u	0.181	0.033	0.278	0.054	0.043
 ```
 
-This means that, on a tier consisting of only "a, e, i, o, u" segments, the pair "a e" had an O/E of 0.12, and the pair "a i" had an O/E of 0.233. Every pair of vowels in a word gets counted separately, so in the word "p a t e k a b e", the sequences "a e", "e a", "a e" will be counted.
+This means that, on a projection consisting of only "a, e, i, o, u" segments, the pair "a e" had an O/E of 0.12, and the pair "a i" had an O/E of 0.233. Every pair of vowels in a word gets counted separately, so in the word "p a t e k a b e", the sequences "a e", "e a", "a e" will be counted.
 
 
 Requirements
