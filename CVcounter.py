@@ -95,9 +95,10 @@ def CVC(path, searchseqs='default', vs=['a','e','i','o','u']):
 if __name__ == '__main__':
     import sys
     filepath = sys.argv[1]
-    if len(sys.argv)==2:
-        CVC(filepath)
-    if len(sys.argv)==3:
-        CVC(filepath, sys.argv[2])
-    else:
+    try:
         CVC(filepath, sys.argv[2], sys.argv[3])
+    except IndexError:
+        try:
+            CVC(filepath, sys.argv[2])
+        except IndexError:
+            CVC(filepath)
