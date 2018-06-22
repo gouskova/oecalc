@@ -48,7 +48,7 @@ def countCVC(path, searchseqs='default', vs=['a','e','i','o','u']):
     path is a path to a LearningData.txt file (or similar)
     '''
     if searchseqs == 'default':
-        seqs = ['C V C V', 'C V C C V', 'C V V C', 'C V C C C V', 'C C V C', 'V C V', 'V V', 'V C C V', 'V C C C V']
+        seqs = ['C V C V', 'C V C C V', 'C V V C', 'C V C V C V', 'C V C V C C V', 'C V C C V C V', 'C V C C C V', 'C C V C', 'V C V', 'V V', 'V C C V', 'V C C C V']
     else:
         seqs = [searchseqs]
     if vs != ['a','e','i','o','u']:

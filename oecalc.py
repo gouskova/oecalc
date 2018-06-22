@@ -1,4 +1,6 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
+
+
 '''
 Supplies a function for calculating Observed/Expected values over pairwise combinations of segments.
 
@@ -41,6 +43,7 @@ start python3 however you always do it, import oecalc, and call help(oecalc)
 
 from itertools import product
 import re
+from nltk import ngrams
 
 # make a dictionary of pairs of segs and collect their O/E values into it
 
@@ -172,6 +175,66 @@ def writeOE(filepath, segs, outfilepath, local, ounded=True):
             f.write(row+'\n')
         f.close()
 
+def trigramOEcalc(filepath, trigram, projection, verbose=False):
+    '''
+    arguments:
+    *filepath* is a path to the file you want to calculate O/E over.
+    formatting: same as the input to Hayes and Wilson's UCLA Phonotactic Learner; segments separated by spaces.
+
+    p a t a
+    p i k u b e
+    s a mb u k i
+    p t a k u
+
+    The trigram argument is a specific non-local sequence that you want to evaluate. It must be parameterized against a specific projection. That is,
+    say you want to see how often the sequence "a e i" occurs in a word. You presumably want to look at the nonlocal trigram of these vowels, but not include in your counts examples where other vowels intervene--that is, you want to count "p a t e k i" but not "p a t e u k i". In order to make this happen, add "a e i o u" as the projection that you are counting on.
+
+    O/E of the trigram is calculated as follows:
+    Expected: N(S1) * N(S2) * N(s3) / N of all trigrams
+    Observed: N(S1S2S3)
+    the function will return unrounded OE, as well as a value rounded to the parameter given by the "rounded" argument.
+    '''
+    #some prep for counting
+    projection = projection.strip().split(' ')
+    trigram = trigram.strip().split(' ')
+    observed_counts=0
+    expec_dic={'seg1':0, 'seg2':0, 'seg3':0}
+    n_of_all_trigrams = 0
+    with open(filepath, 'r', encoding='utf-8') as f:
+        for word in f:
+            projsegs = [x for x in word.strip().split(' ') if x in projection]
+            if len(projsegs)<3:
+                continue
+            if len(projsegs)==3 and projsegs!=trigram:
+                n_of_all_trigrams+=1
+                if projsegs[0] == trigram[0]:
+                    expec_dic['seg1']+=1
+                if projsegs[1] == trigram[1]:
+                    expec_dic['seg2']+=1
+                if projsegs[2] == trigram[2]:
+                    expec_dic['seg3']+=1
+            else:
+                for subtrig in ngrams(projsegs, 3):
+                    n_of_all_trigrams+=1
+                    if list(subtrig) == trigram:
+                        observed_counts+=1
+                    if subtrig[0]==trigram[0]:
+                        expec_dic['seg1']+=1
+                    if subtrig[1]==trigram[1]:
+                        expec_dic['seg2']+=1
+                    if subtrig[2]==trigram[2]:
+                        expec_dic['seg3']+=1
+    if verbose:
+        print('observed counts for trigram %s : %s' % (' '.join(trigram), observed_counts))
+        print('number of all trigrams in wordlist: ' + str(n_of_all_trigrams))
+        print('positional frequencies for each segment:\n %s : %s \n %s : %s \n %s : %s' % (trigram[0], expec_dic['seg1'], trigram[1], expec_dic['seg2'], trigram[2], expec_dic['seg3']))
+    expected = expec_dic['seg1']*expec_dic['seg2']*expec_dic['seg3']*n_of_all_trigrams
+    try:
+        return round(observed_counts/expected,6)
+    except ZeroDivisionError:
+        print("The O/E is not undefined (division by zero)")
+        
+           
 
 #if you want to run it from command line--just to print table of OE values to screen
 if __name__ == "__main__":
