@@ -228,7 +228,7 @@ def trigramOEcalc(filepath, trigram, projection, verbose=False):
         print('observed counts for trigram %s : %s' % (' '.join(trigram), observed_counts))
         print('number of all trigrams in wordlist: ' + str(n_of_all_trigrams))
         print('positional frequencies for each segment:\n %s : %s \n %s : %s \n %s : %s' % (trigram[0], expec_dic['seg1'], trigram[1], expec_dic['seg2'], trigram[2], expec_dic['seg3']))
-    expected = expec_dic['seg1']*expec_dic['seg2']*expec_dic['seg3']*n_of_all_trigrams
+    expected = expec_dic['seg1']*expec_dic['seg2']*expec_dic['seg3']/n_of_all_trigrams
     try:
         return round(observed_counts/expected,6)
     except ZeroDivisionError:
