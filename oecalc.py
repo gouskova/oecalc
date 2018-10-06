@@ -239,11 +239,9 @@ def trigramOEcalc(filepath, trigram, projection, verbose=False):
 #if you want to run it from command line--just to print table of OE values to screen
 if __name__ == "__main__":
     import sys
-    if len(sys.argv)==1:
-        print("you need to supply some arguments to oecalc. for example, enter the following at the bash prompt:$ oecalc /home/yourname/directory/yourfile.txt 'a e i o u' local")
-    else:
-        filepath=sys.argv[1]
-        segs=sys.argv[2]
+    try:
+        filepath = [x for x in sys.argv if x.endswith('.txt')][0]
+        segs = [x for x in sys.argv if " " in x][0]
         if 'local' in sys.argv:
             local = True
         elif 'nonlocal' in sys.argv:
@@ -258,3 +256,7 @@ if __name__ == "__main__":
                 print('something went wrong')
         for row in table:
             print(row)
+    except:
+        print("You entered: ")
+        print(sys.argv)
+        print("you need to supply three arguments to oecalc: the file where your words are (ending in .txt), the segments you want to calculate O/E statistics for, encased in quotation marks (e.g., 'a e i o u'), and a local/nonlocal choice.\nfor example, enter the following at the bash prompt:\n$ oecalc /home/yourname/directory/yourfile.txt 'a e i o u' local")
