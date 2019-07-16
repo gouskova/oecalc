@@ -60,7 +60,6 @@ def countCVC(path, searchseqs='default', vs=['a','e','i','o','u']):
     with open(path, 'r', encoding='utf-8') as f:
         for line in f:
             word = line.rstrip("\n").split(" ")
-            print(word)
             CVword = []
             for i in range(len(word)):
                 if word[i] in vowels:
@@ -68,7 +67,6 @@ def countCVC(path, searchseqs='default', vs=['a','e','i','o','u']):
                 else:
                     CVword.append("C")
             CVword = ' '.join(CVword)
-            print(CVword)
             for seq in CVdic:
                 #to count overlapped instances of CVC in every word
                 #special module (not overwrought regex)
