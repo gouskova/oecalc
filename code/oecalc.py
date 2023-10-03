@@ -20,6 +20,8 @@ Input format for the segment list:
 
 The OE() function will print a table of pairwise OE calculations in Terminal or save it to a file in the location you specify; see doc entry for "OE" for details.
 
+There is also a trigram O/E function, currently nonlocal only. Improved based on suggestion by Kaustubh Ghoshal to square the denominator (N of all trigrams) to make the O/E ratio interpretable using the "1" threshold, as for bigrams.
+
 Example use:
 
 
@@ -190,7 +192,7 @@ def trigramOEcalc(filepath, trigram, projection, verbose=False):
     say you want to see how often the sequence "a e i" occurs in a word. You presumably want to look at the nonlocal trigram of these vowels, but not include in your counts examples where other vowels intervene--that is, you want to count "p a t e k i" but not "p a t e u k i". In order to make this happen, add "a e i o u" as the projection that you are counting on.
 
     O/E of the trigram is calculated as follows:
-    Expected: N(S1) * N(S2) * N(s3) / N of all trigrams
+    Expected: N(S1) * N(S2) * N(s3) / N^2 of all trigrams
     Observed: N(S1S2S3)
     the function will return unrounded OE, as well as a value rounded to the parameter given by the "rounded" argument.
     '''
@@ -228,7 +230,7 @@ def trigramOEcalc(filepath, trigram, projection, verbose=False):
         print('observed counts for trigram %s : %s' % (' '.join(trigram), observed_counts))
         print('number of all trigrams in wordlist: ' + str(n_of_all_trigrams))
         print('positional frequencies for each segment:\n %s : %s \n %s : %s \n %s : %s' % (trigram[0], expec_dic['seg1'], trigram[1], expec_dic['seg2'], trigram[2], expec_dic['seg3']))
-    expected = expec_dic['seg1']*expec_dic['seg2']*expec_dic['seg3']/n_of_all_trigrams
+    expected = expec_dic['seg1']*expec_dic['seg2']*expec_dic['seg3']/n_of_all_trigrams^2
     try:
         return round(observed_counts/expected,6)
     except ZeroDivisionError:
